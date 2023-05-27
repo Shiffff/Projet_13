@@ -5,6 +5,7 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Profil from "../pages/Profil/Profil";
 import Error from "./Error";
+import AuthGuard from "../helpers/AuthGuard";
 
 const Router = () => {
   return (
@@ -13,7 +14,16 @@ const Router = () => {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profil />} />
+
+          <Route
+            path="/profile"
+            element={
+              <AuthGuard>
+                <Profil />
+              </AuthGuard>
+            }
+          />
+
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>

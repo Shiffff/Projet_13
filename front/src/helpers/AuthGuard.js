@@ -4,7 +4,7 @@ import { accountService } from "../services/account_service";
 
 const AuthGuard = ({ children }) => {
   if (!accountService.isLogged()) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return children;
