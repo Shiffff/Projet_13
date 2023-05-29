@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 20px;
+
   }
   
   .main-nav a {
@@ -31,4 +31,11 @@
   .main-nav-logo-image {
     max-width: 100%;
     width: 200px;
+  }
+  nav{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: white;
   }

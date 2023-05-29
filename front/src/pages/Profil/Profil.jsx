@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { userService } from '../../services/user.service';
 import { setUserData, setUpdateUserData } from "../../feature/user.slice";
+import "./profil.css"
 
 
 
@@ -47,7 +48,7 @@ const Profil = () => {
           {handleForm ? (
                       <form onSubmit={(e) => handleCheckSubmit(e)}>
                       <div className="input-wrapper">
-                        <label htmlFor="firstName">firstName</label
+                        <label htmlFor="firstName">New firstName</label
                         ><input
                       type="text"
                       name="firstName"
@@ -57,7 +58,7 @@ const Profil = () => {
                     />
                       </div>
                       <div className="input-wrapper">
-                        <label htmlFor="lastName">lastName</label
+                        <label htmlFor="lastName">New lastName</label
                         >
                         <input
                       type="lastName"
@@ -67,14 +68,10 @@ const Profil = () => {
                       value={user.lastName}
                       onChange={(e) => handleChange(e)}
                     />
-          
                       </div>
                       <div className="input-remember">
-                        <input type="checkbox" id="remember-me" /><label htmlFor="remember-me"
-                          >Remember me</label
-                        >
                       </div>
-                      <button type='submit'  className="sign-in-button">Sign In</button> 
+                      <button type='submit'  className="sign-in-button">Modify</button> 
                     </form>
           
           ) : (
