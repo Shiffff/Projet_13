@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { userService } from '../../services/user.service';
-import { setUserData, setUpdateUserData } from "../../feature/user.slice";
+import { setUpdateUserData } from "../../feature/user.slice";
 import "./profil.css"
 
 
@@ -26,20 +26,8 @@ const Profil = () => {
     .then((res) =>{
       dispatch(setUpdateUserData(user));
       setHandleForm(false)
-
     })
-
   }
-  useEffect(() => {
-    userService.getUser()
-    .then((res) => {
-      dispatch(setUserData(res.data.body));
-
-    })
-    
-  }, []);
-
-
     return (
         <main className="main bg-dark">
         <div className="header">

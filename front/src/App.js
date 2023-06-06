@@ -1,7 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Router from "./utils/Router";
+import { accountService } from "./services/account_service";
+import { userService } from "./services/user.service";
+import { setUserData } from "./feature/user.slice";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+  if (accountService.isLogged()) {
+    userService.getUser().then((res) => {
+      dispatch(setUserData(res.data.body));
+    });
+  }
+
   return (
     <div className="App">
       <BrowserRouter>

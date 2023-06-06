@@ -3,9 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { accountService } from "../../services/account_service";
 import { useNavigate } from "react-router-dom";
+import { userService } from '../../services/user.service';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../../feature/user.slice';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('')
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -22,10 +27,14 @@ const Login = () => {
     .login(user)
     .then((res) => {
       accountService.saveToken(res.data.body.token);  
-      navigate("/profile");    
+      userService.getUser()
+      .then((res) => {
+        dispatch(setUserData(res.data.body));
+      })
+      navigate("/profile");
 })
     .catch((err) => {
-      console.log(err)
+      setErrorMessage(err.message)
     })
   }
 
@@ -65,6 +74,7 @@ const Login = () => {
                 >Remember me</label
               >
             </div>
+            <p>{errorMessage}</p>
             <button className="sign-in-button">Sign In</button> 
           </form>
         </section>
