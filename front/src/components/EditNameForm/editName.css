@@ -1,0 +1,23 @@
+.inputContainer{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+@media (max-width: 720px) {
+    .inputContainer {
+      flex-direction: column;
+    }
+}
+.btnContainer{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.btnContainer button{
+    width: 130px;
+    height: 30px;
+    border: 1px solid #00bc77;
+    color: #00bc77;
+    font-weight: 600;
+    cursor: pointer;
+}

@@ -249,3 +249,8 @@ main{
     width: 200px;
   }
 }
+.error{
+  margin-top: 200px;
+  font-size: 40px;
+  font-weight: 500;
+}

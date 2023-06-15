@@ -14,11 +14,11 @@ paths:
       tags:
         - User Module
       summary: Login
-      description: API permettant de se connecter à un compte utilisateur
+      description: API for Login
       parameters:
         - in: body
           name: body
-          description: Informations de connexion
+          description: Login Payload
           required: true
           schema:
             $ref: "#/definitions/Login"
@@ -26,23 +26,24 @@ paths:
         - application/json
       responses:
         "200":
-          description: Connexion réussie
+          description: Login Successfully
           schema:
             $ref: "#/definitions/LoginResponse"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
         "500":
-          description: Erreur interne du serveur
+          description: Internal Server Error
+
   /user/signup:
     post:
       tags:
         - User Module
       summary: Signup
-      description: API permettant de créer un nouveau compte utilisateur
+      description: API for Signup
       parameters:
         - in: body
           name: body
-          description: Informations d'inscription
+          description: Signup Payload
           required: true
           schema:
             $ref: "#/definitions/User"
@@ -50,52 +51,60 @@ paths:
         - application/json
       responses:
         "200":
-          description: Inscription réussie
+          description: Signup Successfully
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
         "500":
-          description: Erreur interne du serveur
+          description: Internal Server Error
+
   /user/profile:
     post:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: Profil utilisateur
-      description: API permettant d'obtenir le profil d'un utilisateur
+      summary: User Profile API
+      description: API for fetching a user profile
       parameters:
         - in: header
           name: Authorization
-          description: Token JWT Bearer
+          description: Attach Bearer JWT token
           required: true
+          type: string
       produces:
         - application/json
       responses:
         "200":
-          description: Profil utilisateur récupéré avec succès
+          description: User profile retrieved successfully
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
+        "401":
+          description: Unauthorized - No token provided
+        "403":
+          description: Forbidden - Invalid token
         "500":
-          description: Erreur interne du serveur
+          description: Internal Server Error
+
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: Profil utilisateur
-      description: API permettant de mettre à jour le profil d'un utilisateur
+      summary: User Profile API
+      description: API for updating a user profile
       parameters:
         - in: header
           name: Authorization
-          description: Token JWT Bearer
+          description: Attach Bearer JWT token
           required: true
+          type: string
         - in: body
           name: body
-          description: Attributs de mise à jour du profil utilisateur
+          description: Update user profile attributes
           required: true
           schema:
             $ref: "#/definitions/UserProfile"
@@ -103,192 +112,160 @@ paths:
         - application/json
       responses:
         "200":
-          description: Profil utilisateur mis à jour avec succès
+          description: User profile updated successfully
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
+        "401":
+          description: Unauthorized - No token provided
+        "403":
+          description: Forbidden - Invalid token
         "500":
-          description: Erreur interne du serveur
+          description: Internal Server Error
+
   /transactions:
     get:
       security:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Toutes les transactions du mois en cours
-      description: API permettant d'obtenir toutes les transactions de l'utilisateur pour le mois en cours
+      summary: Get All Transactions
+      description: API to retrieve all transactions
       parameters:
         - in: header
           name: Authorization
-          description: Token JWT Bearer
+          description: Attach Bearer JWT token
           required: true
+          type: string
       produces:
         - application/json
       responses:
         "200":
-          description: Transactions récupérées avec succès
+          description: Transactions retrieved successfully
           schema:
-            $ref: "#/definitions/TransactionList"
+            type: array
+            items:
+              $ref: "#/definitions/Transaction"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
+        "401":
+          description: Unauthorized - No token provided
+        "403":
+          description: Forbidden - Invalid token
         "500":
-          description: Erreur interne du serveur
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Ajouter une transaction
-      description: API permettant d'ajouter une nouvelle transaction pour l'utilisateur
-      parameters:
-        - in: header
-          name: Authorization
-          description: Token JWT Bearer
-          required: true
-        - in: body
-          name: body
-          description: Informations de la nouvelle transaction
-          required: true
-          schema:
-            $ref: "#/definitions/Transaction"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: Transaction ajoutée avec succès
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
-          description: Champs invalides
-        "500":
-          description: Erreur interne du serveur
-  /transactions/{transactionId}:
+          description: Internal Server Error
+
+  /transaction/{id}:
     get:
       security:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Détails d'une transaction
-      description: API permettant d'obtenir les détails d'une transaction spécifique
+      summary: Get Transaction by ID
+      description: API to retrieve a specific transaction by ID
       parameters:
+        - in: path
+          name: id
+          description: ID of the transaction to retrieve
+          required: true
+          type: string
         - in: header
           name: Authorization
-          description: Token JWT Bearer
-          required: true
-        - in: path
-          name: transactionId
-          description: Identifiant de la transaction
+          description: Attach Bearer JWT token
           required: true
           type: string
       produces:
         - application/json
       responses:
         "200":
-          description: Détails de la transaction récupérés avec succès
+          description: Transaction retrieved successfully
           schema:
-            $ref: "#/definitions/Transaction"
+            $ref: "#/definitions/TransactionById"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
+        "401":
+          description: Unauthorized - No token provided
+        "403":
+          description: Forbidden - Invalid token
         "404":
-          description: Transaction non trouvée
+          description: Transaction not found
         "500":
-          description: Erreur interne du serveur
-    put:
+          description: Internal Server Error
+
+    patch:
       security:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Mettre à jour une transaction
-      description: API permettant de mettre à jour les informations d'une transaction spécifique
+      summary: Update Transaction
+      description: API to update the notes and category of a transaction
       parameters:
+        - in: path
+          name: id
+          description: ID of the transaction to update
+          required: true
+          type: string
         - in: header
           name: Authorization
-          description: Token JWT Bearer
-          required: true
-        - in: path
-          name: transactionId
-          description: Identifiant de la transaction
+          description: Attach Bearer JWT token
           required: true
           type: string
         - in: body
           name: body
-          description: Nouvelles informations de la transaction
+          description: Updated transaction attributes
           required: true
           schema:
-            $ref: "#/definitions/Transaction"
+            $ref: "#/definitions/TransactionUpdate"
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction mise à jour avec succès
+          description: Transaction updated successfully
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Champs invalides
+          description: Invalid Fields
+        "401":
+          description: Unauthorized - No token provided
+        "403":
+          description: Forbidden - Invalid token
         "404":
-          description: Transaction non trouvée
+          description: Transaction not found
         "500":
-          description: Erreur interne du serveur
-    delete:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Supprimer une transaction
-      description: API permettant de supprimer une transaction spécifique
-      parameters:
-        - in: header
-          name: Authorization
-          description: Token JWT Bearer
-          required: true
-        - in: path
-          name: transactionId
-          description: Identifiant de la transaction
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: Transaction supprimée avec succès
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
-          description: Champs invalides
-        "404":
-          description: Transaction non trouvée
-        "500":
-          description: Erreur interne du serveur
+          description: Internal Server Error
 
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
+
 definitions:
   User:
     properties:
       email:
         type: string
-        description: Adresse e-mail de l'utilisateur
+        description: user email
       password:
         type: string
-        description: Mot de passe de l'utilisateur
+        description: user password
       firstName:
         type: string
-        description: Prénom de l'utilisateur
+        description: user first name
       lastName:
         type: string
-        description: Nom de famille de l'utilisateur
+        description: user last name
+
   Login:
     properties:
       email:
         type: string
-        description: Adresse e-mail de l'utilisateur
+        description: user email
       password:
         type: string
-        description: Mot de passe de l'utilisateur
+        description: user password
+
   ApiResponse:
     type: object
     properties:
@@ -303,11 +280,13 @@ definitions:
             type: string
           email:
             type: string
+
   LoginResponse:
     type: object
     properties:
       token:
         type: string
+
   UserProfile:
     type: object
     properties:
@@ -315,22 +294,43 @@ definitions:
         type: string
       lastName:
         type: string
+
   Transaction:
     type: object
     properties:
       id:
         type: string
-        description: Identifiant de la transaction
-      date:
-        type: string
-        description: Date de la transaction
       amount:
         type: number
-        description: Montant de la transaction
-      description:
+      name:
         type: string
-        description: Description de la transaction
-  TransactionList:
-    type: array
-    items:
-      $ref: "#/definitions/Transaction"
+      balance:
+        type: string
+
+  TransactionById:
+    type: object
+    properties:
+      id:
+        type: string
+      amount:
+        type: number
+      name:
+        type: string
+      balance:
+        type: string
+      transactionType:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+
+  TransactionUpdate:
+    type: object
+    properties:
+      notes:
+        type: string
+        description: Updated notes for the transaction
+      category:
+        type: string
+        description: Updated category for the transaction

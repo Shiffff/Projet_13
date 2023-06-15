@@ -4,14 +4,18 @@ import { accountService } from "./services/account_service";
 import { userService } from "./services/user.service";
 import { setUserData } from "./feature/user.slice";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
-  if (accountService.isLogged()) {
-    userService.getUser().then((res) => {
-      dispatch(setUserData(res.data.body));
-    });
-  }
+
+  useEffect(() => {
+    if (accountService.isLogged()) {
+      userService.getUser().then((res) => {
+        dispatch(setUserData(res.data.body));
+      });
+    }
+  }, []);
 
   return (
     <div className="App">
