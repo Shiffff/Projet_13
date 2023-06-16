@@ -130,8 +130,8 @@ paths:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Get All Transactions
-      description: API to retrieve all transactions
+      summary: Get current month transactions
+      description: API to retrieve current month transactions
       parameters:
         - in: header
           name: Authorization
@@ -146,7 +146,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Transaction"
+              $ref: "#/definitions/TransactionById"
         "400":
           description: Invalid Fields
         "401":
@@ -156,7 +156,7 @@ paths:
         "500":
           description: Internal Server Error
 
-  /transaction/{id}:
+  /transactions/{id}:
     get:
       security:
         - Bearer: []
@@ -223,7 +223,7 @@ paths:
         "200":
           description: Transaction updated successfully
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/TransactionById"
         "400":
           description: Invalid Fields
         "401":
@@ -295,22 +295,12 @@ definitions:
       lastName:
         type: string
 
-  Transaction:
-    type: object
-    properties:
-      id:
-        type: string
-      amount:
-        type: number
-      name:
-        type: string
-      balance:
-        type: string
-
   TransactionById:
     type: object
     properties:
       id:
+        type: string
+      bankAccountId:
         type: string
       amount:
         type: number
